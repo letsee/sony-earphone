@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Letsee WebAR - SONY WF1000XM3 </title>
+	<meta content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no, viewport-fit=cover" name="viewport" />
+
+	<script src="https://cdn.letsee.io/webar/letsee-0.9.19.min.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/105/three.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700|Roboto:100,300,400,500,700,900&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=DM+Serif+Display&display=swap" rel="stylesheet">
+	
+	<script src="vendor/inflate.min.js"></script>
+	<script src="vendor/loaders/FBXLoader.js"></script>
+	
+	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	
+	<!--Swiper-->
+	<!--<link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.css">
+	<link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
+	<script src="https://unpkg.com/swiper/js/swiper.js"></script>
+	<script src="https://unpkg.com/swiper/js/swiper.min.js"></script>-->
+	<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
+	<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+	
+	<script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+	
+	<!--Hammer-->
+	<script src="https://hammerjs.github.io/dist/hammer.js"></script>
+	
+	<link rel="stylesheet" href="css/main.css">
+	<style media="place" type="text/css">
+		#swiper-container {
+			-letsee-target: uri('sony.json');
+			-letsee-transform: translate(0, 0, 0);
+			/*border: 1px solid red;*/
+		}
+	</style>
+	
+	<style>
+		.multiple-items {
+			height: 250px;
+			width: 100%;
+			position: absolute;
+			z-index: 200;
+			transform: translate(-50%, -50%);
+			top: 50%;
+			left: 50%;
+		}
+		.multiple-items .items {
+			background: rgba(255,255,255,0.6);
+			border: none;
+			margin-left: 10px;
+			margin-right: 10px;
+			padding: 10px;
+			display: inline;
+			height: 250px;
+			position: relative;
+		}
+		.multiple-items .items p {
+			width: 235px;
+			font-family: 'Roboto', sans-serif;
+			font-weight: 400;
+			font-size: 16px;
+			text-align: center;
+		}
+		
+		#button-control {
+			bottom: 0;
+			position: absolute;
+			transform: translate(-50%, -50%);
+			left: 50%;
+			top: 85%;
+			height: 100px;
+			width: 100%;
+			/*background: blue;*/
+			display: inline-block;
+		}
+		#model-1, #model-2, #model-3 {
+			width: 80px;
+			height: 81px;
+			border: none;
+			transform: translate(50%, 0);
+			left: 50%;
+			top: 0;
+		}
+		#model-1 img, #model-2 img, #model-3 img {
+			margin: 0 auto;
+			padding: 0;
+			width: 40%;
+			position: absolute;
+			transform: translate(-50%, -50%);
+			top: 40%;
+			left: 50%;
+		}
+		#model-1 {
+			position: absolute;
+			transform: translate(-50%, -50%);
+			top: 50%;
+			left: 50%;
+			background: url("resources/images/bt-original-bg.png") no-repeat;
+			
+		}
+		#model-2 {
+			position: absolute;
+			transform: translate(-50%, -50%);
+			top: 50%;
+			left: 77%;
+			background: url("resources/images/bt-original-bg.png") no-repeat;
+		}
+		#model-3 {
+			position: absolute;
+			transform: translate(-50%, -50%);
+			top: 50%;
+			left: 23%;
+			background: url("resources/images/bt-original-bg.png") no-repeat;
+		}
+	</style>
+</head>
+
+<body>
+
+<div id="container">
+
+	<!-- Swiper.js Container -->
+	<div id="swiper-container">
+		<div class="swiper-wrapper">
+			<div class="swiper-slide swiper-item">
+				<div id="contents">
+					<div id="product-video">
+						<video id="productVideoContent" playsinline controls autoplay muted loop>
+							<source src="resources/images/product_video.mp4" type="video/mp4">
+						</video>
+					</div>
+	
+					<div id="review-swiper">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide review-item ">
+								<div id="item-01">
+									<div class="header">
+										<span class="title">REVIEW</span>
+										<img class="left-arrow" src="resources/images/arrow-left-black.png"/>
+										<img class="right-arrow" src="resources/images/arrow-right-gray.png"/>
+									</div>
+									<p class="main-text">
+										Sony’s New Wireless Earbuds Put Amazing Noise Canceling in Your Pocket.
+									</p>
+									<div class="add-box">
+										<div class="additional-01"><p>GIZMODO</p></div>
+										<div class="additional-02"><img src="resources/images/review-wired-01.png" /></div>
+									</div>
+								</div>
+							</div>
+							<div class="swiper-slide review-item">
+								<div id="item-02">
+									<div class="header">
+										<span class="title">REVIEW</span>
+										<img class="left-arrow" src="resources/images/arrow-left-gray.png"/>
+										<img class="right-arrow" src="resources/images/arrow-right-black.png"/>
+									</div>
+									<p class="main-text">
+										The WF-1000XM3 sound fantastic fit securely and comfortably, and have some fun, touch based featured
+									</p>
+									<div class="add-box">
+										<div class="additional-01"><p>GIZMODO</p></div>
+										<div class="additional-02"><img src="resources/images/review-wired-02.png" /></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="swiper-slide swiper-item">
+				<div id="button-control">
+					<button id="model-1">
+						<img id="bt-icon-1" src="resources/images/ic-overview.png" alt="">
+					</button>
+					<button id="model-2">
+						<img id="bt-icon-2" src="resources/images/ic-detail.png" alt="">
+					</button>
+					<button id="model-3">
+						<img id="bt-icon-3" src="resources/images/ic-rotate.png" alt="">
+					</button>
+				</div>
+			</div>
+			<div class="swiper-slide swiper-item">
+				<div id="features">
+					<div id="ft-1">
+						<p class="title">FEATURE 01</p>
+						<img src="resources/images/ft-1.png" alt="">
+					</div>
+					<div id="ft-2">
+						<p class="title">FEATURE 02</p>
+						<img id="ft2-img-1" src="resources/images/ft-2-1.png" alt="">
+						<img id="ft2-img-2" src="resources/images/ft-2-2.png" alt="">
+					</div>
+					<div id="ft-3">
+						<p class="title">FEATURE 03</p>
+						<img src="resources/images/ft-3.png" alt="">
+						<p id="des">HD Noise Canceling Processor QN1e</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="swiper-pagenation"></div>
+	</div>
+
+	<div id="myElement" style="display: none">Rotate here!</div>
+</div>
+	
+	<script src="js/app.js"></script>
+	<script>
+		const config = {
+			"appKey": "8hTenCFZL3q3jIBZLHoQ72QYTvJdKM5IROK5hdUS69JeH91iGfWD7ApQWZSwzN2g",
+			"trackerType": "IMAGE",
+			"external": "THREE"
+		};
+		letsee.init(config, initWorld);
+		
+		letsee.onTrackStart((e) => {
+			
+			MODEL_1.css({ "background": "url('resources/images/bt-clicked-bg.png')" });
+			MODEL_2.css({ "background": "url('resources/images/bt-original-bg.png')" });
+			MODEL_3.css({ "background": "url('resources/images/bt-original-bg.png')" });
+			
+			animate();
+		});
+
+    function initSwiper() {
+	    const FbxModelSwiperToggle = function() {
+		    if(world.children[0] !== undefined) {
+			    let index = this.activeIndex;
+			    console.log(index);
+			    // if (index === 0 || index === 2) {
+				//     world.children[0].visible = false;
+			    // } else if (index === 1) {
+				//     world.children[0].visible = true;
+			    // }
+			    
+			    (index === 1) ? world.children[0].visible = true : world.children[0].visible = false;
+		    }
+	    };
+	    
+    	let mainSwiper = new Swiper('#swiper-container', {
+	        effect: 'coverflow',
+	        loop: false,
+	        centeredSlides: true,
+	        slidesPerView: 1,
+	        initialSlide: 1,
+	        preventClicks: false,
+	        preventClicksPropagation: false,
+	        coverflowEffect: {
+	        	rotate: 0,
+	            stretch: -70,
+	            depth: 250,
+	            modifier: 1,
+	            slideShadows: false
+	        },
+	        pagination: {
+	        	el: '.swiper-pagenation',
+	            type: 'bullets',
+	            clickable: 'true'
+	        },
+		    on: {
+			    slideChange: FbxModelSwiperToggle
+		    },
+        });
+
+        let addBoxSwiper = new Swiper('#review-swiper', {
+	        effect: 'flip',
+	        loop: false,
+	        autoplay: {
+	          delay: 3000,
+	          waitForTransition: false,
+	        },
+	        speed:1000,
+	        allowTouchMove:false,
+	        centeredSlides: true,
+	        slidesPerView: 1,
+	        initialSlide: 0,
+	        on: {
+	        	slideChange: function() {
+			        $("#item-01 .left-arrow").css('visibility','hidden');
+			        $("#item-01 .right-arrow").css('visibility','hidden');
+			        $("#item-02 .left-arrow").css('visibility','hidden');
+			        $("#item-02 .right-arrow").css('visibility','hidden');
+			        
+			    },
+		        slideChangeTransitionStart: function() {
+			        if(this.activeIndex === 0) {
+				        $("#item-01 .left-arrow").css('visibility','visible');
+				        $("#item-01 .right-arrow").css('visibility','visible');
+				        $("#item-02 .left-arrow").css('visibility','hidden');
+				        $("#item-02 .right-arrow").css('visibility','hidden');
+				
+			        } else if (this.activeIndex === 1) {
+				        $("#item-01 .left-arrow").css('visibility','hidden');
+				        $("#item-01 .right-arrow").css('visibility','hidden');
+				        $("#item-02 .left-arrow").css('visibility','visible');
+				        $("#item-02 .right-arrow").css('visibility','visible');
+			        }
+		        }
+	        }
+	        })
+    }
+
+    initSwiper();
+	</script>
+	
+</body>
+</html>
