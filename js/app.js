@@ -147,7 +147,7 @@ function rotateMe() {
 }
 
 MODEL_1.click(function () {
-	
+
 	MODEL_1.css({ "background": "url('resources/images/bt-clicked-bg.png')" });
 	MODEL_2.css({ "background": "url('resources/images/bt-original-bg.png')" });
 	MODEL_3.css({ "background": "url('resources/images/bt-original-bg.png')" });
