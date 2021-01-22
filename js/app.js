@@ -1,4 +1,12 @@
 
+// 3D
+let scene,
+		camera,
+		renderer,
+		toystory,
+		mainMesh,
+		secondMesh;
+
 // Declare variables
 const SWIPE_AREA = $('#swipe-area');
 const MODEL_1 = $('#model-1');
@@ -8,230 +16,320 @@ const BUTTON_ICON_1 = $('#bt-icon-1');
 const BUTTON_ICON_2 = $('#bt-icon-2');
 const BUTTON_ICON_3 = $('#bt-icon-3');
 
-let camera, scene, renderer;
 let object, mixer1, mixer2;
 let action1, action2;
 let light1, directionalLight, spotLight;
 let clock = new THREE.Clock();
-let world = new THREE.Object3D();
+// let world = new THREE.Object3D();
 let elementArray = [];
-
-let mainURL = 'https://intra.letsee.io/3D-model/fbx/sony/';
-
-function initWorld() {
-	
-	// Using renderer, camera and scene from Engine.
-	renderer = letsee.threeRenderer;
-	camera = renderer.camera;
-	scene = renderer.scene;
-	
-	// Adding lights
-	light1 = new THREE.HemisphereLight(0xFFFFFF, 0xFFFFFF, 1);
-	scene.add( light1 );
-	
-	directionalLight = new THREE.DirectionalLight( 0xffffff );
-	directionalLight.position.set( 0, 200, 100 );
-	directionalLight.castShadow = true;
-	directionalLight.shadow.camera.top = 180;
-	directionalLight.shadow.camera.bottom = - 100;
-	directionalLight.shadow.camera.left = - 120;
-	directionalLight.shadow.camera.right = 120;
-	scene.add( directionalLight );
-	
-	// Loading model
-	let promise = loadScript(1, mainURL + 'Sony_01_7.fbx')
-		.then(function (result) {
-			console.log(result);
-			return loadScript(2, mainURL + 'Sony_earphon_V5_0103_10.fbx');
-		})
-		.then(result => console.log(result));
-	
-	renderer.addObjectToEntity('sony.json', world);
-	
-}
-
-function loadScript(id, src) {
-	return new Promise(function(resolve, reject) {
-		
-		// load models here...
-		let loader = new THREE.FBXLoader();
-		
-		loader.load(src, function ( obj ) {
-			
-			if (obj.animations.length) {
-				console.log('PLAY MODEL ANIMATION.');
-				if (id === 1) {
-					mixer1 = new THREE.AnimationMixer( obj );
-					action1 = mixer1.clipAction( obj.animations[0]);
-					action1.play();
-				}
-				else if (id === 2) {
-					mixer2 = new THREE.AnimationMixer( obj );
-					action2 = mixer2.clipAction( obj.animations[0]);
-					action2.play();
-				}
-			}
-			
-			obj.traverse( function ( child ) {
-				if ( child.isMesh ) {
-					child.castShadow = true;
-					child.receiveShadow = true;
-				}
-			} );
-			
-			obj.name ='item'+id;
-			
-			if (id === 1) {
-				obj.type ='Sony_01';
-				obj.position.y = -100;
-				obj.rotation.y = 24;
-				obj.scale.setScalar(30);
-			}
-			else if (id === 2) {
-				obj.type ='Sony_02';
-				obj.position.y = -250;
-				obj.position.x = 10;
-				
-				obj.rotation.y = -315;
-				obj.scale.setScalar(50);
-			}
-			
-			(id === 1) ? obj.visible = true : obj.visible = false;
-			
-			world.add(obj);
-			elementArray.push(obj);
-			
-			resolve(`Id: ${id}, ${src} is loaded!`);
-		});
-	});
-}
 
 // This plays model's animation
 let flag1 = true;
 let flag2= false;
 let flag3= false;
 
-function animate() {
-	
-	if (flag1){
-		requestAnimationFrame( animate );
-	}
-	
-	var delta = clock.getDelta();
-	if ( mixer1 ) mixer1.update( delta );
+let overviewAnimId, rotateModelId, earpodAnimId;
+
+let mainURL = 'https://intra.letsee.io/3D-model/fbx/sony/';
+const loadingManager = new THREE.LoadingManager();
+loadingManager.onProgress = (item, loaded, total) => console.log(item, loaded, total);
+
+// Instantiate a fbxLoader
+let fbxLoader = new THREE.FBXLoader();
+
+/**
+ * Initialize 3D world.
+ */
+function initWorld() {
+
+	initScene();
+	proceedModel();
+
 }
 
-function animate2() {
-	
-	if (flag2){
-		requestAnimationFrame( animate2 );
-	}
-	
-	var delta = clock.getDelta();
+/**
+ * Initialze Scene.
+ */
+function initScene() {
+
+	// 1. Adding lights
+	let dirLight = new THREE.DirectionalLight(0xffffff, 2.5);
+	dirLight.position.set(-0.5, 0.5, 0.866);
+	dirLight.castShadow = false;
+	dirLight.shadow.mapSize = new THREE.Vector2(512, 512);
+	scene.add(dirLight);
+
+	let pmremGenerator = new THREE.PMREMGenerator( renderer );
+	pmremGenerator.compileEquirectangularShader();
+
+	// 2. Set background for scene as image
+	new THREE.RGBELoader()
+	.setDataType( THREE.UnsignedByteType )
+	.setPath( './resources/textures/' )
+	.load( 'royal_esplanade_1k.hdr', function ( texture ) {
+
+		let envMap = pmremGenerator.fromEquirectangular( texture ).texture;
+
+		// scene.background = envMap;
+		scene.environment = envMap;
+
+		texture.dispose();
+		pmremGenerator.dispose();
+
+	});
+
+	// 3. Set light effects for renderer
+	renderer.toneMappingExposure     = 1;
+	renderer.toneMapping             = 0;
+	renderer.gammaFactor             = 2;
+	renderer.outputEncoding          = THREE.sRGBEncoding;
+	renderer.physicallyCorrectLights = true;
+	renderer.setPixelRatio( window.devicePixelRatio );
+}
+
+/**
+ * 1. Load model.
+ * 2. Add model into Entity.
+ * 3. Add Entity into Scene.
+ */
+function proceedModel() {
+
+	letsee.addTarget('sony.json').then(entity => {
+		toystory = entity;
+
+		// 1. Load Sony model
+		loadMainModel()
+		.then(model => {
+			console.warn(`Model ${model.name} loaded completed!`);
+			mainMesh = model;
+
+			// 2.Add mesh into entity
+			toystory.add(mainMesh);
+
+			// 3. Add entity to scene
+			scene.add(toystory);
+
+			if (mainMesh) {
+
+				// Load second model
+				loadSecondModel().then(_mesh => {
+					console.warn(`Model ${_mesh.name} loaded completed!`);
+					secondMesh = _mesh;
+					toystory.add(secondMesh);
+				});
+			}
+		});
+
+		// Render all
+		renderAll().then(() => {});
+	});
+}
+
+/**
+ * Render all.
+ * @returns {Promise<void>}
+ */
+const renderAll = async function() {
+	requestAnimationFrame(renderAll);
+
+	window.camera = letsee.threeRenderer().getDeviceCamera();
+
+	renderer.render(scene, window.camera);
+	await letsee.threeRenderer().update();
+};
+
+/**
+ * Load main model.
+ * @returns {Promise<unknown>}
+ */
+function loadMainModel() {
+	return new Promise(resolve => {
+
+		fbxLoader.load( mainURL + 'Sony_01_7.fbx' , function(obj) {
+
+			obj.type ='sony';
+			obj.name ='Sony_01';
+			obj.position.y = -80;
+			obj.rotation.y = 24;
+			obj.scale.setScalar(30);
+
+			// Create custom animation clips
+			if (obj.animations.length > 0) {
+				mixer1 = new THREE.AnimationMixer( obj );
+				action1 = mixer1.clipAction( obj.animations[0]);
+				action1.play();
+			}
+
+			resolve(obj);
+		}, onProgress, onError);
+	})
+}
+
+/**
+ * Load second model.
+ * @returns {Promise<unknown>}
+ */
+function loadSecondModel() {
+	return new Promise(resolve => {
+
+		fbxLoader.load( mainURL + 'Sony_earphon_V5_0103_10.fbx' , function(obj) {
+
+			obj.type ='sony';
+			obj.name ='Sony_02';
+			obj.position.y = -250;
+			obj.position.x = 10;
+			obj.rotation.y = -315;
+			obj.scale.setScalar(50);
+			obj.visible = false;
+
+			// Create custom animation clips
+			if (obj.animations.length > 0) {
+				mixer2 = new THREE.AnimationMixer( obj );
+				action2 = mixer2.clipAction( obj.animations[0]);
+				action2.play();
+			}
+
+			resolve(obj);
+		}, onProgress, onError);
+	})
+}
+
+/**
+ * Play animation of main model - overview.
+ */
+function overviewAnimation() {
+	overviewAnimId = requestAnimationFrame(overviewAnimation);
+
+	let delta = clock.getDelta();
+	if ( mixer1 ) mixer1.update( delta );
+
+}
+
+/**
+ * Play Earpods animation.
+ */
+function playEarpodAnim() {
+	earpodAnimId= requestAnimationFrame( playEarpodAnim );
+
+	let delta = clock.getDelta();
 	if ( mixer2 ) mixer2.update( delta );
 }
 
-// This plays manual animation
-var count = 0;
-function rotateMe() {
-	
-	if(flag3) {
-		requestAnimationFrame( rotateMe );
-	}
-	
-	var time = Date.now() * 0.0008;
-	
-	if (world.children[0] !== undefined) {
-		world.children[0].rotation.y = time * 0.7;
-	}
+/**
+ * Rotate current model.
+ */
+function rotateCurrentModel() {
+	rotateModelId = requestAnimationFrame( rotateCurrentModel );
+
+	let time = Date.now() * 0.0008;
+
+	toystory.children.forEach( c => {
+		if (!c.visible) return;
+
+		c.rotation.y = time * 0.7;
+	})
 }
 
-MODEL_1.click(function () {
+/**
+ * Rotate main model.
+ */
+function rotateModel(){
+
+	console.error(`rotateModel`);
+
+	MODEL_1.css({ "background": "url('resources/images/bt-original-bg.png')" });
+	MODEL_2.css({ "background": "url('resources/images/bt-original-bg.png')" });
+	MODEL_3.css({ "background": "url('resources/images/bt-clicked-bg.png')" });
+
+	rotateCurrentModel();
+
+}
+
+/**
+ * Show overview of the main model.
+ */
+function showOverviewModel() {
+
+	console.error(`showOverviewModel`);
 
 	MODEL_1.css({ "background": "url('resources/images/bt-clicked-bg.png')" });
 	MODEL_2.css({ "background": "url('resources/images/bt-original-bg.png')" });
 	MODEL_3.css({ "background": "url('resources/images/bt-original-bg.png')" });
-	
-	resetOthersModels('item1');
-	
-	if(action1 !== undefined) {
-		action1.reset();
-		
-		// reset model to original states
-		world.children[0].rotation.set(0, 24, 0);
-		world.children[0].quaternion.set(0, -0.5365729180004349, 0, 0.8438539587324921);
-	}
-	
-	flag2 = false;
-	flag3 = false;
-	flag1 = true;
-	animate();
-});
 
-MODEL_2.click(function () {
-	
+	toystory.children.forEach( obj => {
+		if (obj.name === 'Sony_01') obj.visible = true;
+		if (obj.name === 'Sony_02') obj.visible = false;
+	})
+
+	cancelAnimationFrame(rotateModelId);
+	cancelAnimationFrame(earpodAnimId);
+
+	setTimeout(() =>{
+		overviewAnimation();
+	}, 500)
+
+}
+
+/**
+ * Show earpod detail.
+ */
+function showEarPodDetail() {
+
+	console.error(`showEarPodDetail`);
+
 	MODEL_1.css({ "background": "url('resources/images/bt-original-bg.png')" });
 	MODEL_2.css({ "background": "url('resources/images/bt-clicked-bg.png')" });
 	MODEL_3.css({ "background": "url('resources/images/bt-original-bg.png')" });
-	
-	resetOthersModels('item2');
-	
-	if(action2 !== undefined) {
-		action2.reset();
-		
-		// reset model to original states
-		world.children[0].rotation.set(0, -315, 0);
-		world.children[0].quaternion.set(0, -0.4080958218391593, 0, 0.9129390999389944);
 
-	}
-	
-	flag1 = false;
-	flag3 = false;
-	flag2 = true;
-	animate2();
-	
-});
+	toystory.children.forEach( obj => {
+		if (obj.name === 'Sony_01') obj.visible = false;
+		if (obj.name === 'Sony_02') obj.visible = true;
+	})
 
-MODEL_3.click(function () {
-	
-	MODEL_1.css({ "background": "url('resources/images/bt-original-bg.png')" });
-	MODEL_2.css({ "background": "url('resources/images/bt-original-bg.png')" });
-	MODEL_3.css({ "background": "url('resources/images/bt-clicked-bg.png')" });
-	
-	if (count  > 0) {
-		flag3 = false;
-		count  =0;
-	}
-	else {
-		count = count + 1;
-		flag3 = true;
-		rotateMe();
-	}
-	
-	
-	// flag3 = true;
-	// rotateMe();
-	
-});
+	cancelAnimationFrame(overviewAnimId);
+	cancelAnimationFrame(rotateModelId);
 
-// SWIPE_AREA.on('swipe', function(event, slick, direction) {
-// 	// console.log('CURRENT SLIDE: ' + document.getElementsByClassName('slick-active')[0].id);
-// 	var currentItem = document.getElementsByClassName('slick-active')[0].id;
-// 	resetOthersModels(currentItem);
-// });
+	setTimeout(() => {
+		playEarpodAnim();
+	}, 500)
 
-function resetOthersModels(index) {
-	
-	// remove all childs
-	for( var i = world.children.length - 1; i >= 0; i--) {
-		world.remove(world.children[i]);
-	}
-	
-	// add current one [index]
-	for (var j=0;j<elementArray.length;j++) {
-		if (elementArray[j].name === index) {
-			world.add(elementArray[j]);
-			world.children[0].visible = true;
+}
+
+window.onload = () => {
+
+	let btnOverview = document.getElementById('model-1');
+	let btnRotate = document.getElementById('model-2');
+	let btnEarpodDetail = document.getElementById('model-3');
+
+	btnOverview.addEventListener('click', () => showOverviewModel());
+	btnRotate.addEventListener('click', () => rotateModel());
+	btnEarpodDetail.addEventListener('click', () => showEarPodDetail());
+}
+
+/**
+ * Show the progress of loading model
+ * @param xhr
+ */
+function onProgress(xhr) {
+	if (xhr.lengthComputable) {
+		const percentComplete = xhr.loaded / xhr.total * 100;
+		// console.warn(Math.round(percentComplete) + '%');
+
+		// setProgress(Math.round(percentComplete));
+
+		if (Math.round(percentComplete) === 100) {
+			setTimeout(() => {
+
+				// document.getElementById('hint').style.display = 'none';
+			}, 1000);
 		}
 	}
+}
+
+/**
+ * Show error if loading error.
+ * @param e
+ */
+function onError(e) {
+	console.error(e);
 }

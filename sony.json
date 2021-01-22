@@ -1,10 +1,7 @@
 {
-	"uri":"sony.json",
-	"name":"Letsee Web AR SDK",
-	"size":{
+	"physicalSize": {
 		"width": 337,
 		"height": 412
 	},
-	"scale": 1,
-	"image":"sony1000.png"
+	"image": "sony1000.png"
 }

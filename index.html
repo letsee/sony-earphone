@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <title>Letsee WebAR - SONY WF1000XM3</title>
 	<meta charset="utf-8">
-	<title>Letsee WebAR - SONY WF1000XM3</title>
-	<meta content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no, viewport-fit=cover" name="viewport" />
-
-  <!-- Letsee SDK -->
-	<script src="https://cdn.letsee.io/webar/letsee-0.9.19.min.js"></script>
-
+  
+  <!-- Letsee Engine - Updated 2021.01.12 -->
+  <script src="letsee.js"></script>
+<!--  <script src="https://developer.letsee.io/api/webar?key=84573ab90c103fb9688df247791837098a7ebdab4ae57f11e30db6ecf355bf4e"></script>-->
+  
   <!-- Three.js -->
-	<script src="https://unpkg.com/three@0.105.0/build/three.min.js"></script>
-	<script src="https://unpkg.com/three@0.105.0/examples/js/loaders/FBXLoader.js"></script>
-	<script src="https://unpkg.com/three@0.105.0/examples/js/libs/inflate.min.js"></script>
+	<script src="https://unpkg.com/three@0.124.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.124.0/examples/js/loaders/RGBELoader.js"></script>
+	<script src="https://unpkg.com/three@0.124.0/examples/js/loaders/FBXLoader.js"></script>
+	<script src="https://unpkg.com/three@0.124.0/examples/js/libs/inflate.min.js"></script>
  
 	<link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700|Roboto:100,300,400,500,700,900&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=DM+Serif+Display&display=swap" rel="stylesheet">
@@ -23,75 +24,24 @@
 	<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 	<script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
 	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-	
-	<style media="place" type="text/css">
-		#swiper-container {
-			-letsee-target: uri('sony.json');
-			-letsee-transform: translate(0, 0, 0);
-		}
-	</style>
+  
+  <style media="place" type="text/css">
+    #container {
+      -letsee-target: uri('sony.json');
+      width: 337px;
+      height: 412px;
+    }
+  </style>
   
   <link rel="stylesheet" href="css/main.css">
-	
-	<style>
-		#button-control {
-			bottom: 0;
-			position: absolute;
-			transform: translate(-50%, -50%);
-			left: 50%;
-			top: 85%;
-			height: 100px;
-			width: 100%;
-			display: inline-block;
-		}
-		#model-1, #model-2, #model-3 {
-			width: 80px;
-			height: 81px;
-			border: none;
-			transform: translate(50%, 0);
-			left: 50%;
-			top: 0;
-		}
-		#model-1 img, #model-2 img, #model-3 img {
-			margin: 0 auto;
-			padding: 0;
-			width: 40%;
-			position: absolute;
-			transform: translate(-50%, -50%);
-			top: 40%;
-			left: 50%;
-		}
-		#model-1 {
-			position: absolute;
-			transform: translate(-50%, -50%);
-			top: 50%;
-			left: 50%;
-			background: url("resources/images/bt-original-bg.png") no-repeat;
-			
-		}
-		#model-2 {
-			position: absolute;
-			transform: translate(-50%, -50%);
-			top: 50%;
-			left: 77%;
-			background: url("resources/images/bt-original-bg.png") no-repeat;
-		}
-		#model-3 {
-			position: absolute;
-			transform: translate(-50%, -50%);
-			top: 50%;
-			left: 23%;
-			background: url("resources/images/bt-original-bg.png") no-repeat;
-		}
-	</style>
+
 </head>
 
 <body>
 
 <div id="container">
-
 	<!-- Swiper.js Container ------>
-	<div id="swiper-container">
+	<div id="swiper-container"c>
 		<div class="swiper-wrapper">
 			<div class="swiper-slide swiper-item">
 				<div id="contents">
@@ -141,15 +91,17 @@
 			</div>
 			<div class="swiper-slide swiper-item">
 				<div id="button-control">
+     
 					<button id="model-1">
 						<img id="bt-icon-1" src="resources/images/ic-overview.png" alt="">
 					</button>
-					<button id="model-2">
+					<button id="model-3">
 						<img id="bt-icon-2" src="resources/images/ic-detail.png" alt="">
 					</button>
-					<button id="model-3">
-						<img id="bt-icon-3" src="resources/images/ic-rotate.png" alt="">
-					</button>
+          <button id="model-2">
+            <img id="bt-icon-3" src="resources/images/ic-rotate.png" alt="">
+          </button>
+     
 				</div>
 			</div>
 			<div class="swiper-slide swiper-item">
@@ -177,29 +129,48 @@
 </div>
 
   <script src="js/app.js"></script>
-	<script>
-		const config = {
-			"appKey": "8hTenCFZL3q3jIBZLHoQ72QYTvJdKM5IROK5hdUS69JeH91iGfWD7ApQWZSwzN2g",
-			"trackerType": "IMAGE",
-			"external": "THREE"
-		};
-		letsee.init(config, initWorld);
-		
-		letsee.onTrackStart((e) => {
-			
-			MODEL_1.css({ "background": "url('resources/images/bt-clicked-bg.png')" });
-			MODEL_2.css({ "background": "url('resources/images/bt-original-bg.png')" });
-			MODEL_3.css({ "background": "url('resources/images/bt-original-bg.png')" });
-			
-			animate();
-		});
+  
+  <script>
+    letsee.ready(() => {
+      letsee.start();
+    
+      letsee.addTHREE(THREE).then(obj => {
+        camera = obj.camera;
+        renderer = obj.renderer;
+        scene = obj.scene;
+        initWorld();
+      })
+    
+      letsee.onTrackStart(() => {
+        MODEL_1.css({ "background": "url('resources/images/bt-clicked-bg.png')" });
+        MODEL_2.css({ "background": "url('resources/images/bt-original-bg.png')" });
+        MODEL_3.css({ "background": "url('resources/images/bt-original-bg.png')" });
+        document.getElementById('ls_html-renderers').style.zIndex = '2000';
+      });
+      letsee.onTrackEnd(() => {});
+      letsee.onTrackMove(() => {});
+    
+    });
+    letsee.init();
+  
+    // Prevent user zoom in/out the webpage
+    document.addEventListener('gesturestart', function (e) {
+      e.preventDefault();
+    });
+  </script>
 
+	<script>
     function initSwiper() {
 	    const FbxModelSwiperToggle = function() {
-		    if(world.children[0] !== undefined) {
-			    let index = this.activeIndex;
-			    (index === 1) ? world.children[0].visible = true : world.children[0].visible = false;
-		    }
+	      
+	      if (toystory === undefined) return;
+       
+	      toystory.children.forEach( obj => {
+	        if (obj.type === 'sony') {
+            let index = this.activeIndex;
+            (index === 1) ? obj.visible = true : obj.visible = false;
+          }
+        })
 	    };
 	    
     	let mainSwiper = new Swiper('#swiper-container', {
