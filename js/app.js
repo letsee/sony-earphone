@@ -16,6 +16,8 @@ let clock = new THREE.Clock();
 let world = new THREE.Object3D();
 let elementArray = [];
 
+let mainURL = 'https://intra.letsee.io/3D-model/fbx/sony/';
+
 function initWorld() {
 	
 	// Using renderer, camera and scene from Engine.
@@ -37,51 +39,15 @@ function initWorld() {
 	scene.add( directionalLight );
 	
 	// Loading model
-	let promise = loadScript(1, 'resources/models/fbx/Sony_01_7.fbx')
+	let promise = loadScript(1, mainURL + 'Sony_01_7.fbx')
 		.then(function (result) {
 			console.log(result);
-			return loadScript(2, 'resources/models/fbx/earphone03/Sony_earphon_V5_0103_10.fbx');
+			return loadScript(2, mainURL + 'Sony_earphon_V5_0103_10.fbx');
 		})
-		// .then(function (result) {
-		// 	console.log(result);
-		// 	return loadScript(3, 'resources/models/fbx/metallic/Sony.fbx');
-		// })
 		.then(result => console.log(result));
 	
 	renderer.addObjectToEntity('sony.json', world);
 	
-	// function loadModel() {
-	//
-	// 	if (object.animations.length) {
-	// 		console.log('PLAY MODEL ANIMATION.');
-	// 		mixer = new THREE.AnimationMixer( object );
-	// 		var action = mixer.clipAction( object.animations[0]);
-	// 		action.play();
-	// 	}
-	// 	else {
-	// 		console.log('MODEL DOES NOT HAVE ANIMATIONS. object.animations.length: ' + object.animations.length);
-	// 	}
-	//
-	// 	object.traverse( function ( child ) {
-	// 		if ( child.isMesh ) {
-	// 			child.castShadow = true;
-	// 			child.receiveShadow = true;
-	// 		}
-	// 	} );
-	//
-	// 	// After loading model, add it into the planar image target
-	// 	renderer.addObjectToEntity('sony.json', object);
-	// }
-	//
-	// var loader = new THREE.FBXLoader(manager);
-	// loader.load('resources/models/fbx/assemble.fbx', function ( obj ) {
-	// 	object = obj;
-	// 	object.scale.setScalar(5);
-	// 	object.position.y = 10;
-	// 	object.rotation.y = -20;
-	//
-	// });
-	//animate();
 }
 
 function loadScript(id, src) {
@@ -269,30 +235,3 @@ function resetOthersModels(index) {
 		}
 	}
 }
-
-// Hammer
-var myElement = document.getElementById('myElement');
-var mc = new Hammer(myElement);
-
-// create a pinch and rotate recognizer
-// these require 2 pointers
-var pinch = new Hammer.Pinch();
-var rotate = new Hammer.Rotate();
-
-// we want to detect both the same time
-pinch.recognizeWith(rotate);
-
-// add to the Manager
-mc.add([pinch, rotate]);
-
-mc.on("rotate", function(ev) {
-	var currentItem = world.children[0];
-	// currentItem.rotation.set(ev.rotation, ev.rotation, ev.rotation);
-	// currentItem.rotation.set(ev.angle*(Math.PI/180), ev.angle*(Math.PI/180), ev.angle*(Math.PI/180));
-	currentItem.rotation.set(ev.angle*(Math.PI/360), ev.angle*(Math.PI/360), 0);
-});
-
-// listen to events...
-// mc.on("panleft panright tap press", function(ev) {
-// 	myElement.textContent = ev.type +" gesture detected.";
-// });
