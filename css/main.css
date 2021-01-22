@@ -83,6 +83,10 @@ button {
   width: 337px;
   height: 412px;
 }
+#swiper-container img {
+  width: 100%;
+  z-index: 100;
+}
 #swiper-container #button-control {
   bottom: 0;
   position: absolute;
@@ -122,52 +126,33 @@ button {
 #swiper-container #button-control #model-3 {
   background: url("../resources/images/bt-original-bg.png") no-repeat;
 }
-
-#swiper-container img {
-  width: 100%;
-  z-index: 100;
-}
-
-.swiper-pagenation {
-  text-align: center;
-  padding-top: 15px;
-}
-
-.swiper-wrapper {
+#swiper-container .swiper-wrapper {
   width: 600px;
 }
-
-#review-swiper {
+#swiper-container .swiper-wrapper #contents {
+  width: 100%;
+}
+#swiper-container .swiper-wrapper #contents #product-video {
+  width: 280px;
+  height: 158px;
+}
+#swiper-container .swiper-wrapper #contents #product-video video {
+  width: 337px;
+  height: 158px;
+  object-fit: fill;
+  margin-top: 20px;
+}
+#swiper-container .swiper-wrapper #contents .review-item {
+  background-image: url("../resources/images/review-bg.png");
+  background-size: cover;
+  padding: 20px;
+}
+#swiper-container .swiper-wrapper #review-swiper {
   width: 248px;
   height: 215px;
   margin: 30px auto;
 }
-
-#features #ft-1 {
-  width: 100%;
-  height: 150px;
-  padding: 10px;
-  background-image: linear-gradient(127deg, rgba(255, 255, 255, 0.6), #ffffff);
-}
-
-#features #ft-2 {
-  width: 100%;
-  height: 150px;
-  padding: 10px;
-  margin-top: 10px;
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.98));
-}
-
-#features #ft-3 {
-  width: 100%;
-  height: 150px;
-  padding: 10px;
-  margin-top: 10px;
-  background-image: url("../resources/images/ft-3-bg.png");
-  background-size: cover;
-}
-
-#features .title {
+#swiper-container .swiper-wrapper #features .title {
   font-size: 18px;
   font-weight: 900;
   font-stretch: normal;
@@ -176,39 +161,47 @@ button {
   letter-spacing: normal;
   text-align: left;
 }
-
-#features #ft-1 .title, .features #ft-3 .title {
-  color: #000000;
+#swiper-container .swiper-wrapper #features #ft-1 {
+  width: 100%;
+  height: 150px;
+  padding: 10px;
+  background-image: linear-gradient(127deg, rgba(255, 255, 255, 0.6), #ffffff);
 }
-
-#features #ft-2 .title {
-  color: #FFFFFF;
-}
-
-#features #ft-1 img {
+#swiper-container .swiper-wrapper #features #ft-1 img {
   width: 80%;
   margin: 20px 0 0 20px;
 }
-
-#features #ft-2 #ft2-img-1 {
+#swiper-container .swiper-wrapper #features #ft-2 {
+  width: 100%;
+  height: 150px;
+  padding: 10px;
+  margin-top: 10px;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.98));
+}
+#swiper-container .swiper-wrapper #features #ft-2 #ft2-img-1 {
   width: 80px;
   margin: 20px 0 0 40px;
   float: left;
 }
-
-#features #ft-2 #ft2-img-2 {
+#swiper-container .swiper-wrapper #features #ft-2 #ft2-img-2 {
   width: 60px;
   margin: 25px 0 0 25px;
 }
-
-#features #ft-3 img {
+#swiper-container .swiper-wrapper #features #ft-3 {
+  width: 100%;
+  height: 150px;
+  padding: 10px;
+  margin-top: 10px;
+  background-image: url("../resources/images/ft-3-bg.png");
+  background-size: cover;
+}
+#swiper-container .swiper-wrapper #features #ft-3 img {
   width: 82px;
   margin-left: 50%;
   margin-top: 15px;
   transform: translateX(-50%);
 }
-
-#features #ft-3 #des {
+#swiper-container .swiper-wrapper #features #ft-3 #des {
   font-size: 8px;
   font-weight: 500;
   font-style: normal;
@@ -218,27 +211,15 @@ button {
   color: #000000;
   margin-top: 5px;
 }
-
-#contents {
-  width: 100%;
+#swiper-container .swiper-wrapper #features #ft-1 .title, #swiper-container .swiper-wrapper #features #ft-3 .title {
+  color: #000000;
 }
-
-#contents #product-video {
-  width: 280px;
-  height: 158px;
+#swiper-container .swiper-wrapper #features #ft-2 .title {
+  color: #FFFFFF;
 }
-
-#contents #product-video video {
-  width: 280px;
-  height: 158px;
-  object-fit: fill;
-  margin-top: 20px;
-}
-
-#contents .review-item {
-  background-image: url("../resources/images/review-bg.png");
-  background-size: cover;
-  padding: 20px;
+#swiper-container .swiper-pagenation {
+  text-align: center;
+  padding-top: 15px;
 }
 
 /* Review item 01 */

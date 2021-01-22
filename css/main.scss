@@ -85,6 +85,11 @@ button {
   width: 337px;
   height: 412px;
 
+  img {
+    width: 100%;
+    z-index: 100;
+  }
+
   #button-control {
     bottom: 0;
     position: absolute;
@@ -125,118 +130,119 @@ button {
       background: url("../resources/images/bt-original-bg.png") no-repeat;
     }
   }
-}
 
-#swiper-container img {
-  width: 100%;
-  z-index: 100;
-}
+  .swiper-wrapper {
+    width: 600px;
 
-.swiper-pagenation {
-  text-align: center;
-  padding-top: 15px;
-}
+    #contents {
+      width: 100%;
 
-.swiper-wrapper {
-  width: 600px;
-}
+      #product-video{
+        width: 280px;
+        height: 158px;
 
-#review-swiper {
-  width: 248px;
-  height: 215px;
-  margin: 30px auto;
-}
+        video {
+          width: 337px; //280px;
+          height: 158px;
+          object-fit: fill;
+          margin-top: 20px;
+        }
+      }
+
+      .review-item {
+        background-image: url("../resources/images/review-bg.png");
+        background-size: cover;
+        padding:20px;
+      }
+    }
+
+    #review-swiper {
+      width: 248px;
+      height: 215px;
+      margin: 30px auto;
+    }
+
+    #features {
+
+      .title {
+        font-size: 18px;
+        font-weight: 900;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.15;
+        letter-spacing: normal;
+        text-align: left;
+      }
+      #ft-1 {
+        width: 100%;
+        height: 150px;
+        padding: 10px;
+        background-image: linear-gradient(127deg, rgba(255, 255, 255, 0.6), #ffffff);
+
+        img {
+          width: 80%;
+          margin: 20px 0 0 20px;
+        }
+      }
+      #ft-2 {
+        width: 100%;
+        height: 150px;
+        padding: 10px;
+        margin-top: 10px;
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.98));
+
+        #ft2-img-1 {
+          width: 80px;
+          margin: 20px 0 0 40px;
+          float: left;
+        }
+        #ft2-img-2 {
+          width:60px;
+          margin: 25px 0 0 25px;
+        }
+      }
+      #ft-3 {
+        width: 100%;
+        height: 150px;
+        padding: 10px;
+        margin-top: 10px;
+        background-image: url("../resources/images/ft-3-bg.png");
+        background-size: cover;
+
+        img {
+          width: 82px;
+          margin-left:50%;
+          margin-top:15px;
+          transform: translateX(-50%);
+        }
+        #des {
+          font-size: 8px;
+          font-weight: 500;
+          font-style: normal;
+          letter-spacing: normal;
+          text-align: center;
+          width: 100%;
+          color: #000000;
+          margin-top: 5px;
+        }
+      }
+
+      #ft-1 .title, #ft-3 .title {
+        color: #000000;
+      }
+      #ft-2 .title {
+        color: #FFFFFF;
+      }
+    }
+
+  }
+
+  .swiper-pagenation {
+    text-align: center;
+    padding-top: 15px;
+  }
 
 
-#features #ft-1 {
-  width: 100%;
-  height: 150px;
-  padding: 10px;
-  background-image: linear-gradient(127deg, rgba(255, 255, 255, 0.6), #ffffff);
-
-}
-#features #ft-2 {
-  width: 100%;
-  height: 150px;
-  padding: 10px;
-  margin-top: 10px;
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.98));
-}
-#features #ft-3 {
-  width: 100%;
-  height: 150px;
-  padding: 10px;
-  margin-top: 10px;
-  background-image: url("../resources/images/ft-3-bg.png");
-  background-size: cover;
-}
-#features .title {
-  font-size: 18px;
-  font-weight: 900;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.15;
-  letter-spacing: normal;
-  text-align: left;
-}
-#features #ft-1 .title, .features #ft-3 .title {
-  color: #000000;
-}
-#features #ft-2 .title {
-  color: #FFFFFF;
-}
-#features #ft-1 img {
-  width: 80%;
-  margin: 20px 0 0 20px;
-}
-
-#features #ft-2 #ft2-img-1 {
-  width: 80px;
-  margin: 20px 0 0 40px;
-  float: left;
-}
-#features #ft-2 #ft2-img-2 {
-  width:60px;
-  margin: 25px 0 0 25px;
-}
-
-#features #ft-3 img {
-  width: 82px;
-  margin-left:50%;
-  margin-top:15px;
-  transform: translateX(-50%);
-}
-#features #ft-3 #des {
-  font-size: 8px;
-  font-weight: 500;
-  font-style: normal;
-  letter-spacing: normal;
-  text-align: center;
-  width: 100%;
-  color: #000000;
-  margin-top: 5px;
-}
-
-#contents {
-  width: 100%;
-}
-
-#contents #product-video{
-  width: 280px;
-  height: 158px;
-}
-
-#contents #product-video video {
-  width: 280px;
-  height: 158px;
-  object-fit: fill;
-  margin-top: 20px;
-}
-
-#contents .review-item {
-  background-image: url("../resources/images/review-bg.png");
-  background-size: cover;
-  padding:20px;
 }
 
 /* Review item 01 */
