@@ -29,6 +29,8 @@ let flag2= false;
 let flag3= false;
 
 let overviewAnimId, rotateModelId, earpodAnimId;
+let isOverviewClicked = true;
+let isEarpodClicked = false;
 
 let mainURL = 'https://intra.letsee.io/3D-model/fbx/sony/';
 const loadingManager = new THREE.LoadingManager();
@@ -238,8 +240,8 @@ function rotateModel(){
 	console.error(`rotateModel`);
 
 	MODEL_1.css({ "background": "url('resources/images/bt-original-bg.png')" });
-	MODEL_2.css({ "background": "url('resources/images/bt-original-bg.png')" });
-	MODEL_3.css({ "background": "url('resources/images/bt-clicked-bg.png')" });
+	MODEL_2.css({ "background": "url('resources/images/bt-clicked-bg.png')" });
+	MODEL_3.css({ "background": "url('resources/images/bt-original-bg.png')" });
 
 	rotateCurrentModel();
 
@@ -251,6 +253,8 @@ function rotateModel(){
 function showOverviewModel() {
 
 	console.error(`showOverviewModel`);
+	isOverviewClicked = true;
+	isEarpodClicked   = false;
 
 	MODEL_1.css({ "background": "url('resources/images/bt-clicked-bg.png')" });
 	MODEL_2.css({ "background": "url('resources/images/bt-original-bg.png')" });
@@ -277,9 +281,12 @@ function showEarPodDetail() {
 
 	console.error(`showEarPodDetail`);
 
+	isOverviewClicked = false;
+	isEarpodClicked   = true;
+
 	MODEL_1.css({ "background": "url('resources/images/bt-original-bg.png')" });
-	MODEL_2.css({ "background": "url('resources/images/bt-clicked-bg.png')" });
-	MODEL_3.css({ "background": "url('resources/images/bt-original-bg.png')" });
+	MODEL_2.css({ "background": "url('resources/images/bt-original-bg.png')" });
+	MODEL_3.css({ "background": "url('resources/images/bt-clicked-bg.png')" });
 
 	toystory.children.forEach( obj => {
 		if (obj.name === 'Sony_01') obj.visible = false;

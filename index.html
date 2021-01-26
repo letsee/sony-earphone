@@ -101,7 +101,6 @@
           <button id="model-2">
             <img id="bt-icon-3" src="resources/images/ic-rotate.png" alt="">
           </button>
-     
 				</div>
 			</div>
 			<div class="swiper-slide swiper-item">
@@ -168,7 +167,12 @@
 	      toystory.children.forEach( obj => {
 	        if (obj.type === 'sony') {
             let index = this.activeIndex;
-            (index === 1) ? obj.visible = true : obj.visible = false;
+            // (index === 1) ? obj.visible = true : obj.visible = false;
+            if (index === 1) {
+              if (isOverviewClicked && obj.name === 'Sony_01') obj.visible = true;
+              if (isEarpodClicked && obj.name === 'Sony_02') obj.visible = true;
+            }
+            else obj.visible = false;
           }
         })
 	    };
