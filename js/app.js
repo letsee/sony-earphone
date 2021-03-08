@@ -96,7 +96,7 @@ function initScene() {
  */
 function proceedModel() {
 
-	letsee.addTarget('sony.json').then(entity => {
+	letsee.addTarget('https://s-developer.letsee.io/api-tm/target-manager/target-uid/6045f49e358ef31bd651db0e').then(entity => {
 		toystory = entity;
 
 		// 1. Load Sony model
